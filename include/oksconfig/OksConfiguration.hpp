@@ -11,7 +11,7 @@
 #include <set>
 #include <thread>
 
-#include "config/ConfigurationImpl.h"
+#include "config/ConfigurationImpl.hpp"
 
   // forward declarations for OKS classes
 class OksKernel;

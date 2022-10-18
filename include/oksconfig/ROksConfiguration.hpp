@@ -1,7 +1,7 @@
 #ifndef OKSCONFIG_ROKSCONFIGURATION_H_
 #define OKSCONFIG_ROKSCONFIGURATION_H_
 
-#include "oksconfig/OksConfiguration.h"
+#include "oksconfig/OksConfiguration.hpp"
 
 class ROksConfiguration : public OksConfiguration {
 

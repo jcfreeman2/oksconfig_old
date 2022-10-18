@@ -1,12 +1,12 @@
-#include <ers/ers.h>
+#include "ers/ers.hpp"
 
-#include <oks/file.h>
-#include <oks/relationship.h>
+#include "oks/file.hpp"
+#include "oks/relationship.hpp"
 
-#include <config/ConfigObject.h>
+#include "config/ConfigObject.hpp"
 
-#include "oksconfig/OksConfigObject.h"
-#include "oksconfig/OksConfiguration.h"
+#include "oksconfig/OksConfigObject.hpp"
+#include "oksconfig/OksConfiguration.hpp"
 
 
 static std::string
@@ -419,11 +419,11 @@ OksConfigObject::get(const std::string& name, std::vector<ConfigObject>& value)
     {
       if (it->type != OksData::object_type)
         {
-          ERS_DEBUG(1, "object " << *it << " is not loaded (relationship \'" << name << "\' of object " << m_obj << ')');
+          TLOG_DEBUG(1) << "object " << *it << " is not loaded (relationship \'" << name << "\' of object " << m_obj << ')';
         }
       else if (!it->data.OBJECT)
         {
-          ERS_DEBUG(1, "skip (null) object in relationship \'" << name << "\' of object " << m_obj);
+          TLOG_DEBUG(1) << "skip (null) object in relationship \'" << name << "\' of object " << m_obj;
         }
       else
         {

@@ -6,22 +6,22 @@
 #include <algorithm>
 #include <memory>
 
-#include <ers/ers.h>
+#include "ers/ers.hpp"
 
-#include <oks/file.h>
-#include <oks/kernel.h>
-#include <oks/object.h>
-#include <oks/query.h>
-#include <oks/relationship.h>
-#include <oks/access.h>
+#include "oks/file.hpp"
+#include "oks/kernel.hpp"
+#include "oks/object.hpp"
+#include "oks/query.hpp"
+#include "oks/relationship.hpp"
+#include "oks/access.hpp"
 
-#include <config/Configuration.h>
-#include <config/ConfigObject.h>
-#include <config/Change.h>
-#include <config/Schema.h>
+#include "config/Configuration.hpp"
+#include "config/ConfigObject.hpp"
+#include "config/Change.hpp"
+#include "config/Schema.hpp"
 
-#include "oksconfig/OksConfiguration.h"
-#include "oksconfig/OksConfigObject.h"
+#include "oksconfig/OksConfiguration.hpp"
+#include "oksconfig/OksConfigObject.hpp"
 
 ERS_DECLARE_ISSUE( oksconfig, Exception, , )
 
@@ -50,14 +50,14 @@ struct OksConfigurationCheckDB {
   OksConfigurationCheckDB(OksConfiguration * db) : m_db(db), m_run(true) { ; }
 
   ~OksConfigurationCheckDB() {
-    ERS_DEBUG( 3 , "Call destructor of OksConfigurationCheckDB object" );
+    TLOG_DEBUG( 3 ) << "Call destructor of OksConfigurationCheckDB object" ;
     m_db = nullptr;
   }
 
   void
   operator()()
   {
-    ERS_DEBUG(2, "Call user notification");
+    TLOG_DEBUG(2) << "Call user notification";
 
     while (m_run)
       {
@@ -84,11 +84,11 @@ struct OksConfigurationCheckDB {
           }
       }
 
-    ERS_DEBUG( 4 , "Destroy OksConfigurationCheckDB object = " << (void *)this );
+    TLOG_DEBUG( 4 ) << "Destroy OksConfigurationCheckDB object = " << (void *)this ;
 
     delete this;
 
-    ERS_DEBUG( 2 , "Exit user notification" );
+    TLOG_DEBUG( 2 ) << "Exit user notification" ;
   }
 
 };
@@ -129,7 +129,7 @@ is_repo_name(const std::string& name)
                     }
                   catch(oks::exception& ex)
                     {
-                      ERS_DEBUG( 0, "Failed to read TDAQ_DB_USER_REPOSITORY = \'" << s << "\':\n\tcaused by: " << ex.what() );
+                      TLOG_DEBUG( 0) << "Failed to read TDAQ_DB_USER_REPOSITORY = \'" << s << "\':\n\tcaused by: " << ex.what() ;
                     }
                 }
             }
@@ -470,7 +470,7 @@ OksConfiguration::abort()
     {
       const std::string file_name(i->get_full_file_name());
 
-      ERS_DEBUG(1, "destroy created file \'" << file_name << "\')");
+      TLOG_DEBUG(1) << "destroy created file \'" << file_name << "\')";
       m_kernel->close_data(i);
 
       if (int result = unlink(file_name.c_str()))
@@ -493,7 +493,7 @@ OksConfiguration::abort()
       if (i.second->is_updated())
         {
           updated.insert(i.second);
-          ERS_DEBUG(2, "file \'" << i.second->get_full_file_name() << "\' was updated, to be reloaded...");
+          TLOG_DEBUG(2) << "file \'" << i.second->get_full_file_name() << "\' was updated, to be reloaded...";
         }
     }
 
@@ -1322,7 +1322,7 @@ OksConfiguration::check_db()
                   std::set<OksObject *>::iterator j = m_modified.find(i);
                   if (j != m_modified.end())
                     {
-                      ERS_DEBUG(1, "created object " << i << " appears in \'modified\' set, removing...");
+                      TLOG_DEBUG(1) << "created object " << i << " appears in \'modified\' set, removing...";
                       m_modified.erase(j);
                     }
                 }
@@ -1333,7 +1333,7 @@ OksConfiguration::check_db()
                 {
                   if (m_kernel->is_dangling(i))
                     {
-                      ERS_DEBUG(1, "object " << (void *)(i) << " is dangling, ignore...");
+                      TLOG_DEBUG(1) << "object " << (void *)(i) << " is dangling, ignore...";
                     }
                   else
                     {
@@ -1394,7 +1394,7 @@ void
 OksConfiguration::subscribe()
 {
   if(m_check_db_obj == 0) {
-    ERS_DEBUG( 2, "starting CheckDB thread ..." );
+    TLOG_DEBUG( 2) << "starting CheckDB thread ..." ;
     m_check_db_obj = new OksConfigurationCheckDB(this);
     m_check_db_thread = new std::thread(std::ref(*m_check_db_obj));
   }
@@ -1409,13 +1409,13 @@ void
 OksConfiguration::unsubscribe()
 {
   if(m_check_db_obj) {
-    ERS_DEBUG( 2, "stopping CheckDB thread ..." );
+    TLOG_DEBUG( 2) << "stopping CheckDB thread ..." ;
     m_check_db_obj->m_run = false;
     m_check_db_thread->join(); // wait thread termination
     delete m_check_db_thread;
     m_check_db_thread = 0;
     m_check_db_obj = 0;
-    ERS_DEBUG( 2, "the CheckDB thread has been terminated" );
+    TLOG_DEBUG( 2) << "the CheckDB thread has been terminated" ;
   }
 }
 

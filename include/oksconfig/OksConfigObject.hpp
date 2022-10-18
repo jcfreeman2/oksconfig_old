@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 
-#include <oks/kernel.h>
-#include <oks/object.h>
+#include "oks/kernel.hpp"
+#include "oks/object.hpp"
 
-#include "config/ConfigObjectImpl.h"
+#include "config/ConfigObjectImpl.hpp"
 
 class ConfigurationImpl;
 class OksConfiguration;
