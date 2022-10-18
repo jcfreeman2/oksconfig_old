@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>New Page 1</title>
+<style>
+<!--
+pre          {  }
+-->
+</style>
+</head>
+
+<body>
+
+<h4>New config plug-in</h4>
+<p>Introduce new config plug-in implementation <b>roksconfig</b> to be able to get data 
+from oks relational archive.</p>
+<p>The plug-in parameter format is one of the following:</p>
+<ul>
+	<li>
+	<pre>roksconfig:<font color="#800000">connection_string</font>:<font color="#000080">working_schema</font>:<font color="#008000">schema_version</font>:<font color="#808000">data_version</font></pre>
+	</li>
+	<li>
+	<pre>roksconfig:<font color="#800000">connection_string</font>:<font color="#000080">working_schema</font>:<font color="#FF00FF">tag</font></pre>
+	</li>
+</ul>
+<p>where:</p>
+<ul>
+	<li><font color="#800000" face="Courier New" size="2">connection_string</font> 
+	- is the database connection string (see <a href="#oks">oks</a> release 
+	notes for more info)</li>
+	<li><font color="#000080" face="Courier New" size="2">working_schema&nbsp;&nbsp;
+	</font>&nbsp;- is the database working schema (see <a href="#oks">oks</a> 
+	release notes for more info)</li>
+	<li><font color="#008000" size="2" face="Courier New">schema_version&nbsp;&nbsp;
+	</font>&nbsp;- is the schema version of archived data (<b>-1</b> means the 
+	latest or head version)</li>
+	<li><font color="#808000" size="2" face="Courier New">data_version&nbsp;&nbsp;&nbsp;&nbsp;
+	</font>&nbsp;- is the data version of archived data (<b>-1</b> also means 
+	the latest or head version)</li>
+	<li><font color="#FF00FF" size="2" face="Courier New">tag</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	- is a unique tag set on existing data</li>
+</ul>
+<p>Below there are several examples how to dump <i>be_test</i> partition object 
+using archiving of the TDAQ development environment at CERN.</p>
+<h5>Example 1: the schema and data versions are known (e.g. schema-version=4, 
+data-version=15)</h5>
+<blockquote>
+	<pre>bash$ config_dump -d roksconfig:oracle://devdb10/tdaq_dev_backup:onlcool:<b>4</b>:<b>15</b> -c Partition -o be_test</pre>
+</blockquote>
+<h5>Example 2: get from head version</h5>
+<blockquote>
+	<pre>bash$ config_dump -d roksconfig:oracle://devdb10/tdaq_dev_backup:onlcool:<b>-1</b>:<b>-1</b> -c Partition -o be_test</pre>
+</blockquote>
+<h5>Example 3: tag known versions and get object using archive data tag</h5>
+<blockquote>
+	<pre>bash$ oks_tag_data -c oracle://devdb10/tdaq_dev_backup -w onlcool -t <b>best_known_config</b> -s 4 -n 15
+bash$ config_dump -d roksconfig:oracle://devdb10/tdaq_dev_backup:onlcool:<b>best_known_config</b> -c Partition -o be_test</pre>
+</blockquote>
+
+<h4>OksConfig Headers and Classes</h4>
+<p>The oksconfig package now is a pure config plug-in and user should not to use 
+any rdbconfig API explicitly. By this reason all oksconfig headers are not 
+installing anymore. For more information see release notes of the
+<a href="#config">config</a> package.</p>
+<p>The following files cannot be included anymore by user's code:</p>
+<ul>
+	<li>oksconfig/OksConfigObject.h</li>
+	<li>oksconfig/OksConfiguration.h</li>
+</ul>
+<p>The following classes cannot be used anymore explicitly by user's code:</p>
+<ul>
+	<li>OksConfiguration</li>
+	<li>OksConfigObject</li>
+</ul>
+
+</body>
+
+</html>

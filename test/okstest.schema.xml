@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ASCII"?>
+
+<!-- oks-schema version 2.2 -->
+
+
+<!DOCTYPE oks-schema [
+  <!ELEMENT oks-schema (info, (include)?, (comments)?, (class)+)>
+  <!ELEMENT info EMPTY>
+  <!ATTLIST info
+      name CDATA #IMPLIED
+      type CDATA #IMPLIED
+      num-of-items CDATA #REQUIRED
+      oks-format CDATA #FIXED "schema"
+      oks-version CDATA #REQUIRED
+      created-by CDATA #IMPLIED
+      created-on CDATA #IMPLIED
+      creation-time CDATA #IMPLIED
+      last-modified-by CDATA #IMPLIED
+      last-modified-on CDATA #IMPLIED
+      last-modification-time CDATA #IMPLIED
+  >
+  <!ELEMENT include (file)+>
+  <!ELEMENT file EMPTY>
+  <!ATTLIST file
+      path CDATA #REQUIRED
+  >
+  <!ELEMENT comments (comment)+>
+  <!ELEMENT comment EMPTY>
+  <!ATTLIST comment
+      creation-time CDATA #REQUIRED
+      created-by CDATA #REQUIRED
+      created-on CDATA #REQUIRED
+      author CDATA #REQUIRED
+      text CDATA #REQUIRED
+  >
+  <!ELEMENT class (superclass | attribute | relationship | method)*>
+  <!ATTLIST class
+      name CDATA #REQUIRED
+      description CDATA ""
+      is-abstract (yes|no) "no"
+  >
+  <!ELEMENT superclass EMPTY>
+  <!ATTLIST superclass name CDATA #REQUIRED>
+  <!ELEMENT attribute EMPTY>
+  <!ATTLIST attribute
+      name CDATA #REQUIRED
+      description CDATA ""
+      type (bool|s8|u8|s16|u16|s32|u32|s64|u64|float|double|date|time|string|uid|enum|class) #REQUIRED
+      range CDATA ""
+      format (dec|hex|oct) "dec"
+      is-multi-value (yes|no) "no"
+      init-value CDATA ""
+      is-not-null (yes|no) "no"
+      ordered (yes|no) "no"
+  >
+  <!ELEMENT relationship EMPTY>
+  <!ATTLIST relationship
+      name CDATA #REQUIRED
+      description CDATA ""
+      class-type CDATA #REQUIRED
+      low-cc (zero|one) #REQUIRED
+      high-cc (one|many) #REQUIRED
+      is-composite (yes|no) #REQUIRED
+      is-exclusive (yes|no) #REQUIRED
+      is-dependent (yes|no) #REQUIRED
+      ordered (yes|no) "no"
+  >
+  <!ELEMENT method (method-implementation*)>
+  <!ATTLIST method
+      name CDATA #REQUIRED
+      description CDATA ""
+  >
+  <!ELEMENT method-implementation EMPTY>
+  <!ATTLIST method-implementation
+      language CDATA #REQUIRED
+      prototype CDATA #REQUIRED
+      body CDATA ""
+  >
+]>
+
+<oks-schema>
+
+<info name="" type="" num-of-items="4" oks-format="schema" oks-version="oks-08-03-02-13-gebf8a70 built &quot;Mar 10 2021&quot;" created-by="rhauser" created-on="wensley-clued0" creation-time="20020821T102545" last-modified-by="isolov" last-modified-on="pcatd79.cern.ch" last-modification-time="20210311T184353"/>
+
+ <class name="EnumTest">
+  <attribute name="enum1" type="enum" range="ONE,TWO,THREE" init-value="ONE" is-not-null="yes"/>
+  <attribute name="enum2" type="enum" range="TEST1,TEST2,TEST3" is-multi-value="yes" init-value="TEST1" is-not-null="yes"/>
+ </class>
+
+ <class name="TestMultiple">
+  <attribute name="ui" type="u16" is-multi-value="yes" is-not-null="yes"/>
+  <attribute name="str" type="string" is-multi-value="yes" is-not-null="yes"/>
+ </class>
+
+ <class name="TestPrimitive">
+  <attribute name="b" type="bool" is-not-null="yes"/>
+  <attribute name="uc" type="u8" is-not-null="yes"/>
+  <attribute name="sc" type="s8" is-not-null="yes"/>
+  <attribute name="us" type="u16" is-not-null="yes"/>
+  <attribute name="ss" type="s16"/>
+  <attribute name="ui" type="u32" is-not-null="yes"/>
+  <attribute name="si" type="s32" is-not-null="yes"/>
+  <attribute name="ul" type="u64" is-not-null="yes"/>
+  <attribute name="sl" type="s64" is-not-null="yes"/>
+  <attribute name="str" type="string" is-not-null="yes"/>
+  <attribute name="cls" description="It is a first attribute with class-type!" type="class" init-value="TestMultiple"/>
+  <attribute name="f" type="float" is-not-null="yes"/>
+  <attribute name="d" type="double" is-not-null="yes"/>
+ </class>
+
+ <class name="TestRelation">
+  <relationship name="prim" class-type="TestPrimitive" low-cc="one" high-cc="one" is-composite="no" is-exclusive="no" is-dependent="no"/>
+  <relationship name="mult" class-type="TestMultiple" low-cc="zero" high-cc="many" is-composite="no" is-exclusive="no" is-dependent="no"/>
+ </class>
+
+</oks-schema>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ASCII"?>
+
+<!-- oks-data version 2.2 -->
+
+
+<!DOCTYPE oks-data [
+  <!ELEMENT oks-data (info, (include)?, (comments)?, (obj)+)>
+  <!ELEMENT info EMPTY>
+  <!ATTLIST info
+      name CDATA #IMPLIED
+      type CDATA #IMPLIED
+      num-of-items CDATA #REQUIRED
+      oks-format CDATA #FIXED "data"
+      oks-version CDATA #REQUIRED
+      created-by CDATA #IMPLIED
+      created-on CDATA #IMPLIED
+      creation-time CDATA #IMPLIED
+      last-modified-by CDATA #IMPLIED
+      last-modified-on CDATA #IMPLIED
+      last-modification-time CDATA #IMPLIED
+  >
+  <!ELEMENT include (file)*>
+  <!ELEMENT file EMPTY>
+  <!ATTLIST file
+      path CDATA #REQUIRED
+  >
+  <!ELEMENT comments (comment)*>
+  <!ELEMENT comment EMPTY>
+  <!ATTLIST comment
+      creation-time CDATA #REQUIRED
+      created-by CDATA #REQUIRED
+      created-on CDATA #REQUIRED
+      author CDATA #REQUIRED
+      text CDATA #REQUIRED
+  >
+  <!ELEMENT obj (attr | rel)*>
+  <!ATTLIST obj
+      class CDATA #REQUIRED
+      id CDATA #REQUIRED
+  >
+  <!ELEMENT attr (data)*>
+  <!ATTLIST attr
+      name CDATA #REQUIRED
+      type (bool|s8|u8|s16|u16|s32|u32|s64|u64|float|double|date|time|string|uid|enum|class|-) "-"
+      val CDATA ""
+  >
+  <!ELEMENT data EMPTY>
+  <!ATTLIST data
+      val CDATA #REQUIRED
+  >
+  <!ELEMENT rel (ref)*>
+  <!ATTLIST rel
+      name CDATA #REQUIRED
+      class CDATA ""
+      id CDATA ""
+  >
+  <!ELEMENT ref EMPTY>
+  <!ATTLIST ref
+      class CDATA #REQUIRED
+      id CDATA #REQUIRED
+  >
+]>
+
+<oks-data>
+
+<info name="" type="" num-of-items="5" oks-format="data" oks-version="oks-08-03-02-13-gebf8a70 built &quot;Mar 10 2021&quot;" created-by="rhauser" created-on="wensley-clued0" creation-time="20020821T102630" last-modified-by="isolov" last-modified-on="pcatd79.cern.ch" last-modification-time="20210311T184352"/>
+
+<include>
+ <file path="okstest.schema.xml"/>
+</include>
+
+
+<obj class="EnumTest" id="e1">
+ <attr name="enum1" type="enum" val="TWO"/>
+ <attr name="enum2" type="enum">
+  <data val="TEST1"/>
+  <data val="TEST3"/>
+ </attr>
+</obj>
+
+<obj class="TestMultiple" id="multiple">
+ <attr name="ui" type="u16">
+  <data val="1234"/>
+  <data val="5678"/>
+ </attr>
+ <attr name="str" type="string">
+  <data val="hello"/>
+  <data val="world"/>
+ </attr>
+</obj>
+
+<obj class="TestMultiple" id="multiple2">
+ <attr name="ui" type="u16">
+  <data val="1"/>
+  <data val="2"/>
+ </attr>
+ <attr name="str" type="string">
+  <data val="how"/>
+  <data val="are"/>
+  <data val="you"/>
+ </attr>
+</obj>
+
+<obj class="TestPrimitive" id="primitive">
+ <attr name="b" type="bool" val="1"/>
+ <attr name="uc" type="u8" val="48"/>
+ <attr name="sc" type="s8" val="48"/>
+ <attr name="us" type="u16" val="65535"/>
+ <attr name="ss" type="s16" val="32767"/>
+ <attr name="ui" type="u32" val="4294967295"/>
+ <attr name="si" type="s32" val="2147483647"/>
+ <attr name="ul" type="u64" val="18446744073709551615"/>
+ <attr name="sl" type="s64" val="-9223372036854775807"/>
+ <attr name="str" type="string" val="hello world"/>
+ <attr name="cls" type="class" val="TestMultiple"/>
+ <attr name="f" type="float" val="3.141"/>
+ <attr name="d" type="double" val="-31.41"/>
+</obj>
+
+<obj class="TestRelation" id="relation">
+ <rel name="prim" class="TestPrimitive" id="primitive"/>
+ <rel name="mult">
+  <ref class="TestMultiple" id="multiple"/>
+  <ref class="TestMultiple" id="multiple2"/>
+ </rel>
+</obj>
+
+</oks-data>
